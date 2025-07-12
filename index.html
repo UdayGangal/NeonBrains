@@ -7,14 +7,18 @@
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
+  <button id="clearBtn">Clear</button>
   <h1 id="heading"></h1>
   <p class="sub">Press and hold <strong>SPACEBAR</strong> to input Morse Code</p>
   <p class="sub">Short = · , Long = − , Pause = new letter</p>
 
-  <button id="clearBtn">Clear</button>
+  <!-- Morse Input -->
+  <div id="morseDisplay"></div>
 
+  <!-- Output -->
   <div id="output">
     <div id="textDisplay"></div>
+    <span class="cursor">█</span>
   </div>
 
   <!-- Sounds -->
