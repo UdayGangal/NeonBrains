@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Screen Background</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      background-image: url('main.png'); /* Local image */
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      transition: background-image 0.3s ease;
+    }
+
+    /* Loading indicator */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.1);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    body.loading::before {
+      opacity: 1;
+    }
+
+    /* Handle image load state */
+    .background-image {
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hidden image for preloading and fallback -->
+  <img 
+    class="background-image" 
+    src="main.png" 
+    alt="Background image description" 
+    onload="document.body.classList.remove('loading')" 
+    onerror="document.body.style.backgroundImage = 'linear-gradient(to right, #1a2980, #26d0ce)'"
+  />
+
+  <script>
+    // Show loading state initially
+    document.body.classList.add('loading');
+  </script>
+</body>
+</html>
