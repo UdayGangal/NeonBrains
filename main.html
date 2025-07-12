@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Full Screen Background</title>
+  <title>Pixel Night with Twinkling Stars</title>
   <style>
     * {
       margin: 0;
@@ -18,7 +18,7 @@
     }
 
     body {
-      background-image: url('main.png'); /* Local image */
+      background-image: url('main.png'); /* Your forest moon image */
       background-position: center center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -26,51 +26,65 @@
       transition: background-image 0.3s ease;
     }
 
-    /* Loading indicator */
-    body::before {
-      content: '';
+    /* Star field container */
+    .stars {
       position: fixed;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.1);
-      z-index: -1;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
       opacity: 0;
-      transition: opacity 0.3s;
+      animation: twinkle 3s infinite;
     }
 
-    body.loading::before {
-      opacity: 1;
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
     }
 
-    /* Handle image load state */
-    .background-image {
-      position: fixed;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
+    /* Dynamically created stars will go here */
   </style>
 </head>
 <body>
-  <!-- Hidden image for preloading and fallback -->
+  <!-- Hidden preloader fallback -->
   <img 
     class="background-image" 
     src="main.png" 
     alt="Background image description" 
     onload="document.body.classList.remove('loading')" 
     onerror="document.body.style.backgroundImage = 'linear-gradient(to right, #1a2980, #26d0ce)'"
+    style="display:none;"
   />
+
+  <div class="stars" id="stars-container"></div>
 
   <script>
     // Show loading state initially
     document.body.classList.add('loading');
+
+    // Generate random stars
+    const starCount = 150;
+    const container = document.getElementById('stars-container');
+
+    for (let i = 0; i < starCount; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.animationDuration = `${2 + Math.random() * 3}s`;
+      star.style.animationDelay = `${Math.random() * 5}s`;
+      container.appendChild(star);
+    }
   </script>
 </body>
 </html>
