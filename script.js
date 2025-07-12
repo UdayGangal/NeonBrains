@@ -1,6 +1,21 @@
-const morseDisplay = document.getElementById('morse');
-const textDisplay = document.getElementById('text');
-const telegraphSound = document.getElementById('telegraphSound');
+const headingText = "Morse Code Terminal";
+const heading = document.getElementById("heading");
+let index = 0;
+
+// Typewriter effect
+function typeWriter() {
+  if (index < headingText.length) {
+    heading.innerHTML += headingText.charAt(index);
+    index++;
+    setTimeout(typeWriter, 100);
+  }
+}
+typeWriter();
+
+const textDisplay = document.getElementById('textDisplay');
+const clearBtn = document.getElementById('clearBtn');
+const dotSound = document.getElementById('dotSound');
+const dashSound = document.getElementById('dashSound');
 
 const morseMap = {
   ".-": "A", "-...": "B", "-.-.": "C", "-..": "D",
@@ -15,13 +30,11 @@ const morseMap = {
   "---..": "8", "----.": "9"
 };
 
-let pressStart, currentMorse = '', morseSequence = [], textResult = '';
+let pressStart, currentMorse = '', textResult = '';
 let pressTimeout, wordTimeout;
 
 document.addEventListener('keydown', e => {
   if (e.code === 'Space' && !pressStart) {
-    telegraphSound.currentTime = 0;
-    telegraphSound.play();
     e.preventDefault();
     pressStart = new Date().getTime();
     clearTimeout(pressTimeout);
@@ -32,23 +45,41 @@ document.addEventListener('keydown', e => {
 document.addEventListener('keyup', e => {
   if (e.code === 'Space') {
     e.preventDefault();
-    const pressDuration = new Date().getTime() - pressStart;
+    const duration = new Date().getTime() - pressStart;
     pressStart = null;
 
-    currentMorse += pressDuration < 300 ? '.' : '-';
-    morseDisplay.textContent = morseSequence.join(' ') + ' ' + currentMorse;
+    if (duration < 300) {
+      currentMorse += '.';
+      dotSound.currentTime = 0;
+      dotSound.play();
+    } else {
+      currentMorse += '-';
+      dashSound.currentTime = 0;
+      dashSound.play();
+    }
 
     pressTimeout = setTimeout(() => {
-      morseSequence.push(currentMorse);
       const letter = morseMap[currentMorse] || '?';
       textResult += letter;
       textDisplay.textContent = textResult;
       currentMorse = '';
+      scrollToOutput();
     }, 500);
 
     wordTimeout = setTimeout(() => {
       textResult += ' ';
       textDisplay.textContent = textResult;
+      scrollToOutput();
     }, 1000);
   }
+});
+
+function scrollToOutput() {
+  document.getElementById('output').scrollIntoView({ behavior: 'smooth' });
+}
+
+clearBtn.addEventListener('click', () => {
+  currentMorse = '';
+  textResult = '';
+  textDisplay.textContent = '';
 });
