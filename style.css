@@ -7,16 +7,19 @@ body {
   padding: 40px;
   overflow-x: hidden;
   position: relative;
+  caret-color: transparent; /* OPTIONAL: hide browser's blinking cursor */
 }
 
 h1 {
   font-size: 32px;
-  margin-bottom: 10px;
+  margin: 20px auto;
   white-space: nowrap;
   overflow: hidden;
   border-right: 2px solid #00FF00;
   width: 0;
   animation: typing 3s steps(30, end) forwards, blink 0.75s step-end infinite;
+  text-align: center;
+  display: block;
 }
 
 @keyframes typing {
@@ -34,8 +37,9 @@ h1 {
   margin-bottom: 10px;
 }
 
+/* CLEAR BUTTON FIXED TO TOP-RIGHT */
 #clearBtn {
-  position: absolute;
+  position: fixed;
   top: 10px;
   right: 20px;
   background: none;
@@ -45,6 +49,7 @@ h1 {
   font-size: 18px;
   padding: 5px 10px;
   cursor: pointer;
+  z-index: 1000;
 }
 
 #clearBtn:hover {
@@ -52,6 +57,7 @@ h1 {
   color: #000;
 }
 
+/* MORSE CODE ABOVE OUTPUT */
 #morseDisplay {
   text-align: left;
   padding: 20px;
@@ -60,26 +66,22 @@ h1 {
   color: #00FF00;
 }
 
+/* OUTPUT BOTTOM LEFT CORNER */
 #output {
-  position: absolute;
+  position: fixed;
   bottom: 30px;
   left: 30px;
   text-align: left;
   font-size: 26px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
 }
 
-#textDisplay {
-  display: inline-block;
-  white-space: pre-wrap;
-  text-align: left;
-  max-width: 90%;
-}
-
+/* THIN TERMINAL CURSOR */
 .cursor {
-  font-weight: bold;
-  font-size: 26px;
+  display: inline-block;
+  width: 8px;
+  height: 26px;
+  background-color: #00FF00;
   margin-left: 5px;
-  animation: blink 1s step-start infinite;
-}
+  animation:
