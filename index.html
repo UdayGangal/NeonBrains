@@ -7,16 +7,19 @@
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="container">
-    <h1>Morse Code Input</h1>
-    <p>Press and hold <strong>SPACEBAR</strong> to enter Morse Code</p>
-    <p class="sub">Short = · , Long = − , Pause = new letter</p>
-    
-    <div id="morseDisplay">Morse: <span id="morse"></span></div>
-    <div id="textDisplay">Text: <span id="text"></span></div>
+  <h1 id="heading"></h1>
+  <p class="sub">Press and hold <strong>SPACEBAR</strong> to input Morse Code</p>
+  <p class="sub">Short = · , Long = − , Pause = new letter</p>
+
+  <button id="clearBtn">Clear</button>
+
+  <div id="output">
+    <div id="textDisplay"></div>
   </div>
 
-  <audio id="telegraphSound" src="sounds/telegraph.mp3" preload="auto"></audio>
+  <!-- Sounds -->
+  <audio id="dotSound" src="sounds/dot.mp3" preload="auto"></audio>
+  <audio id="dashSound" src="sounds/dash.mp3" preload="auto"></audio>
 
   <script src="script.js"></script>
 </body>
