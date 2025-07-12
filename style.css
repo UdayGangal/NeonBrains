@@ -5,28 +5,56 @@ body {
   font-size: 20px;
   text-align: center;
   padding: 40px;
-}
-
-#container {
-  border: 2px solid #00FF00;
-  padding: 20px;
-  display: inline-block;
-  width: 80%;
+  overflow-x: hidden;
 }
 
 h1 {
   font-size: 32px;
   margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid #00FF00;
+  width: 0;
+  animation: typing 3s steps(30, end) forwards, blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
 }
 
 .sub {
   font-size: 16px;
   color: #00dd00;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-#morseDisplay, #textDisplay {
+#clearBtn {
+  background: none;
+  border: 2px solid #00FF00;
+  color: #00FF00;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  padding: 5px 15px;
   margin-top: 20px;
-  font-size: 24px;
-  text-align: left;
+  cursor: pointer;
+}
+
+#clearBtn:hover {
+  background-color: #00FF00;
+  color: #000;
+}
+
+#output {
+  margin-top: 80px;
+  text-align: center;
+}
+
+#textDisplay {
+  font-size: 28px;
+  padding: 20px;
 }
