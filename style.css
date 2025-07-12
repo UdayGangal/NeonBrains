@@ -1,0 +1,32 @@
+body {
+  background-color: #000;
+  color: #00FF00;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  text-align: center;
+  padding: 40px;
+}
+
+#container {
+  border: 2px solid #00FF00;
+  padding: 20px;
+  display: inline-block;
+  width: 80%;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.sub {
+  font-size: 16px;
+  color: #00dd00;
+  margin-bottom: 20px;
+}
+
+#morseDisplay, #textDisplay {
+  margin-top: 20px;
+  font-size: 24px;
+  text-align: left;
+}
