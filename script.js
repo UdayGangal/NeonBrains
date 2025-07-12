@@ -2,7 +2,6 @@ const headingText = "Morse Code Terminal";
 const heading = document.getElementById("heading");
 let index = 0;
 
-// Typewriter effect
 function typeWriter() {
   if (index < headingText.length) {
     heading.innerHTML += headingText.charAt(index);
@@ -13,6 +12,7 @@ function typeWriter() {
 typeWriter();
 
 const textDisplay = document.getElementById('textDisplay');
+const morseDisplay = document.getElementById('morseDisplay');
 const clearBtn = document.getElementById('clearBtn');
 const dotSound = document.getElementById('dotSound');
 const dashSound = document.getElementById('dashSound');
@@ -58,28 +58,26 @@ document.addEventListener('keyup', e => {
       dashSound.play();
     }
 
+    morseDisplay.textContent = "Morse: " + currentMorse;
+
     pressTimeout = setTimeout(() => {
       const letter = morseMap[currentMorse] || '?';
       textResult += letter;
       textDisplay.textContent = textResult;
       currentMorse = '';
-      scrollToOutput();
+      morseDisplay.textContent = '';
     }, 500);
 
     wordTimeout = setTimeout(() => {
       textResult += ' ';
       textDisplay.textContent = textResult;
-      scrollToOutput();
     }, 1000);
   }
 });
-
-function scrollToOutput() {
-  document.getElementById('output').scrollIntoView({ behavior: 'smooth' });
-}
 
 clearBtn.addEventListener('click', () => {
   currentMorse = '';
   textResult = '';
   textDisplay.textContent = '';
+  morseDisplay.textContent = '';
 });
