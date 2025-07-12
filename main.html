@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixel Night with Twinkling Stars</title>
+  <title>Pixel Night - Stars + Fire GIF</title>
   <style>
     * {
       margin: 0;
@@ -15,18 +15,19 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
+      background-color: black;
     }
 
     body {
-      background-image: url('main.png'); /* Your forest moon image */
-      background-position: center center;
-      background-repeat: no-repeat;
+      background-image: url('main.png'); /* Your forest + moon image */
       background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       background-attachment: fixed;
-      transition: background-image 0.3s ease;
+      position: relative;
     }
 
-    /* Star field container */
+    /* Twinkling Stars */
     .stars {
       position: fixed;
       width: 100%;
@@ -43,8 +44,8 @@
       height: 2px;
       background: white;
       border-radius: 50%;
-      opacity: 0;
-      animation: twinkle 3s infinite;
+      opacity: 0.3;
+      animation: twinkle 3s infinite, float 20s infinite linear;
     }
 
     @keyframes twinkle {
@@ -52,38 +53,92 @@
       50% { opacity: 1; }
     }
 
-    /* Dynamically created stars will go here */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-20px); }
+    }
+
+    /* GIF fire */
+    .fire-gif {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      width: 80px; /* You can adjust width as needed */
+    }
+    /* Navigation Bar */
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.4); /* translucent black */
+  padding: 12px 30px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  z-index: 10;
+  font-family: 'Courier New', monospace;
+  backdrop-filter: blur(4px);
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+  color: #00ffe0;
+  text-shadow: 0 0 5px #00ffe0;
+}
+
   </style>
 </head>
 <body>
-  <!-- Hidden preloader fallback -->
-  <img 
-    class="background-image" 
-    src="main.png" 
-    alt="Background image description" 
-    onload="document.body.classList.remove('loading')" 
-    onerror="document.body.style.backgroundImage = 'linear-gradient(to right, #1a2980, #26d0ce)'"
-    style="display:none;"
-  />
+  <!-- Navigation Bar -->
+<nav class="navbar">
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Morse</a></li>
+    <li><a href="#">Music</a></li>
+    <li><a href="#">Meme</a></li>
+  </ul>
+</nav>
 
+  <!-- Stars container -->
   <div class="stars" id="stars-container"></div>
 
+  <!-- Your GIF file goes here -->
+  <img src="flame-lit.gif" alt="Fire" class="fire-gif" />
+
   <script>
-    // Show loading state initially
-    document.body.classList.add('loading');
+    const starContainer = document.getElementById("stars-container");
+    const totalStars = 400;
 
-    // Generate random stars
-    const starCount = 150;
-    const container = document.getElementById('stars-container');
+    for (let i = 0; i < totalStars; i++) {
+      const star = document.createElement("div");
+      star.classList.add("star");
 
-    for (let i = 0; i < starCount; i++) {
-      const star = document.createElement('div');
-      star.classList.add('star');
+      // Random position
       star.style.top = `${Math.random() * 100}%`;
       star.style.left = `${Math.random() * 100}%`;
-      star.style.animationDuration = `${2 + Math.random() * 3}s`;
-      star.style.animationDelay = `${Math.random() * 5}s`;
-      container.appendChild(star);
+
+      // Varying animation
+      star.style.animationDuration = `${2 + Math.random() * 3}s, ${15 + Math.random() * 10}s`;
+      star.style.animationDelay = `${Math.random() * 5}s, ${Math.random() * 10}s`;
+
+      starContainer.appendChild(star);
     }
   </script>
 </body>
