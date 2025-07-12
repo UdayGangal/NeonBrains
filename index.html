@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Morse Code Terminal</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="container">
+    <h1>Morse Code Input</h1>
+    <p>Press and hold <strong>SPACEBAR</strong> to enter Morse Code</p>
+    <p class="sub">Short = · , Long = − , Pause = new letter</p>
+    
+    <div id="morseDisplay">Morse: <span id="morse"></span></div>
+    <div id="textDisplay">Text: <span id="text"></span></div>
+  </div>
+
+  <audio id="telegraphSound" src="sounds/telegraph.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
