@@ -104,6 +104,82 @@
   color: #00ffe0;
   text-shadow: 0 0 5px #00ffe0;
 }
+/* 🌥️ Cloud animation */
+.cloud {
+  position: absolute;
+  top: 80px;
+  left: -300px; /* Start off-screen */
+  width: 300px;
+  opacity: 0.8;
+  z-index: 2;
+  animation: moveClouds 60s linear infinite;
+}
+
+@keyframes moveClouds {
+  0% {
+    left: -300px;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* 🪵 Wood under fire */
+.wood {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  z-index: 1; /* Below the fire */
+}
+/* General cloud styling */
+.cloud {
+  position: absolute;
+  opacity: 0.8;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Cloud 1 */
+.small-cloud1 {
+  top: 30px;
+  left: -200px;
+  width: 80px;
+  animation: moveCloud1 40s linear infinite;
+}
+
+/* Cloud 2 */
+.small-cloud2 {
+  top: 60px;
+  left: -150px;
+  width: 60px;
+  animation: moveCloud2 50s linear infinite;
+}
+
+/* Cloud 3 */
+.small-cloud3 {
+  top: 45px;
+  left: -180px;
+  width: 70px;
+  animation: moveCloud3 65s linear infinite;
+}
+
+/* Animations */
+@keyframes moveCloud1 {
+  0% { left: -200px; }
+  100% { left: 110%; }
+}
+
+@keyframes moveCloud2 {
+  0% { left: -150px; }
+  100% { left: 100%; }
+}
+
+@keyframes moveCloud3 {
+  0% { left: -180px; }
+  100% { left: 105%; }
+}
 
   </style>
 </head>
@@ -124,6 +200,14 @@
 
   <!-- Your GIF file goes here -->
   <img src="flame-lit.gif" alt="Fire" class="fire-gif" />
+   <!-- Cloud layer -->
+    <img src="final.png" class="cloud small-cloud1" alt="Cloud" />
+    <img src="final.png" class="cloud small-cloud2" alt="Cloud" />
+    <img src="final.png" class="cloud small-cloud3" alt="Cloud" />
+
+
+   <!-- Wood log under fire -->
+    <img src="wood.png" class="wood" alt="Wood Log" />
 
   <script>
     const starContainer = document.getElementById("stars-container");
