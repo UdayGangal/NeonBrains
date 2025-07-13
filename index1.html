@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Morse Code Terminal</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #00FF00;
+      --secondary-color: #00dd00;
+      --bg-color: #000;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--primary-color);
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      margin: 0;
+      padding: 40px;
+      overflow-x: hidden;
+      position: relative;
+      caret-color: transparent;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"><text y="20" font-size="20" fill="lime">█</text></svg>') 16 16, auto;
+    }
+
+    body.red-theme {
+      --primary-color: #FF0000;
+      --secondary-color: #dd0000;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"><text y="20" font-size="20" fill="red">█</text></svg>') 16 16, auto;
+    }
+
+    /* Matrix canvas background */
+    #matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100vw;
+      height: 100vh;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin: 20px auto;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid var(--primary-color);
+      width: 0;
+      animation: typing 3s steps(30, end) forwards, blink 0.75s step-end infinite;
+      text-align: center;
+      display: block;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .sub {
+      font-size: 16px;
+      color: var(--secondary-color);
+      margin-bottom: 10px;
+    }
+
+    #themeBtn {
+      position: fixed;
+      top: 10px;
+      left: 20px;
+      background: none;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      padding: 5px 10px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #themeBtn:hover {
+      background-color: var(--primary-color);
+      color: var(--bg-color);
+    }
+
+    #clearBtn {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      background: none;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      padding: 5px 10px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #clearBtn:hover {
+      background-color: var(--primary-color);
+      color: var(--bg-color);
+    }
+
+    #modeToggle {
+      position: fixed;
+      top: 60px;
+      left: 20px;
+      background: none;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      padding: 5px 10px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #modeToggle:hover {
+      background-color: var(--primary-color);
+      color: var(--bg-color);
+    }
+
+    #morseDisplay, #textDisplay {
+      text-align: left;
+      padding: 20px;
+      margin-top: 100px;
+      font-size: 22px;
+      color: var(--primary-color);
+    }
+
+    #output {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      text-align: left;
+      font-size: 26px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    #resultDisplay {
+      display: inline-block;
+      white-space: pre-wrap;
+      max-width: 90%;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 26px;
+      background-color: var(--primary-color);
+      margin-left: 5px;
+      animation: blink 1s step-start infinite;
+    }
+
+    #textInput {
+      position: fixed;
+      bottom: 100px;
+      left: 30px;
+      background: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      padding: 10px;
+      width: 300px;
+      display: none;
+    }
+
+    #textInput:focus {
+      outline: none;
+      box-shadow: 0 0 10px var(--primary-color);
+    }
+
+    #instructions {
+      position: fixed;
+      bottom: 150px;
+      left: 30px;
+      font-size: 16px;
+      color: var(--secondary-color);
+    }
+  </style>
+</head>
+<body>
+  <!-- Matrix canvas background -->
+  <canvas id="matrixCanvas"></canvas>
+
+  <!-- Theme toggle button -->
+  <button id="themeBtn">Theme</button>
+
+  <!-- Clear button -->
+  <button id="clearBtn">Clear</button>
+
+  <!-- Mode toggle button -->
+  <button id="modeToggle">Text Mode</button>
+
+  <!-- Heading and instructions -->
+  <h1 id="heading"></h1>
+  <p class="sub">Press and hold <strong>SPACEBAR</strong> to input Morse Code</p>
+  <p class="sub">Short = · , Long = − , Pause = new letter</p>
+
+  <!-- Text input for text mode -->
+  <div id="instructions">Type text and press Enter to convert to Morse:</div>
+  <input type="text" id="textInput" placeholder="Enter text here...">
+
+  <!-- Live Morse/Text input display -->
+  <div id="morseDisplay"></div>
+  <div id="textDisplay"></div>
+
+  <!-- Output area -->
+  <div id="output">
+    <div id="resultDisplay"></div>
+    <span class="cursor">█</span>
+  </div>
+
+  <!-- Sounds -->
+  <audio id="dotSound" src="sounds/dot.mp3" preload="auto"></audio>
+  <audio id="dashSound" src="sounds/dash.mp3" preload="auto"></audio>
+
+  <script>
+    // === MATRIX BACKGROUND EFFECT ===
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "アァイィウエカキクケコサシスセタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const isRedTheme = document.body.classList.contains('red-theme');
+      ctx.fillStyle = isRedTheme ? "#F00" : "#0F0";
+      ctx.font = fontSize + "px VT323";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 50);
+
+    window.addEventListener('resize', () => {
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+    });
+
+    // === THEME TOGGLE ===
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('red-theme');
+    });
+
+    // === TYPEWRITER EFFECT (looped) ===
+    const headingText = "Morse Code Terminal";
+    const heading = document.getElementById("heading");
+
+    function typeWriterLoop() {
+      heading.innerHTML = "";
+      heading.style.width = "0";
+      let index = 0;
+
+      function typeChar() {
+        if (index < headingText.length) {
+          heading.innerHTML += headingText.charAt(index);
+          index++;
+          setTimeout(typeChar, 100);
+        } else {
+          setTimeout(typeWriterLoop, 2000);
+        }
+      }
+
+      typeChar();
+    }
+    typeWriterLoop();
+
+    // === MODE TOGGLE ===
+    const modeToggle = document.getElementById('modeToggle');
+    const textInput = document.getElementById('textInput');
+    const instructions = document.getElementById('instructions');
+    let isMorseMode = true;
+
+    modeToggle.addEventListener('click', () => {
+      isMorseMode = !isMorseMode;
+      if (isMorseMode) {
+        modeToggle.textContent = 'Text Mode';
+        textInput.style.display = 'none';
+        instructions.style.display = 'none';
+      } else {
+        modeToggle.textContent = 'Morse Mode';
+        textInput.style.display = 'block';
+        instructions.style.display = 'block';
+        textInput.focus();
+      }
+      clearAll();
+    });
+
+    // === MORSE CONVERTER LOGIC ===
+    const morseDisplay = document.getElementById('morseDisplay');
+    const textDisplay = document.getElementById('textDisplay');
+    const resultDisplay = document.getElementById('resultDisplay');
+    const clearBtn = document.getElementById('clearBtn');
+    const dotSound = document.getElementById('dotSound');
+    const dashSound = document.getElementById('dashSound');
+
+    const morseMap = {
+      ".-": "A", "-...": "B", "-.-.": "C", "-..": "D",
+      ".": "E", "..-.": "F", "--.": "G", "....": "H",
+      "..": "I", ".---": "J", "-.-": "K", ".-..": "L",
+      "--": "M", "-.": "N", "---": "O", ".--.": "P",
+      "--.-": "Q", ".-.": "R", "...": "S", "-": "T",
+      "..-": "U", "...-": "V", ".--": "W", "-..-": "X",
+      "-.--": "Y", "--..": "Z",
+      "-----": "0", ".----": "1", "..---": "2", "...--": "3",
+      "....-": "4", ".....": "5", "-....": "6", "--...": "7",
+      "---..": "8", "----.": "9"
+    };
+
+    const textToMorseMap = {
+      "A": ".-", "B": "-...", "C": "-.-.", "D": "-..",
+      "E": ".", "F": "..-.", "G": "--.", "H": "....",
+      "I": "..", "J": ".---", "K": "-.-", "L": ".-..",
+      "M": "--", "N": "-.", "O": "---", "P": ".--.",
+      "Q": "--.-", "R": ".-.", "S": "...", "T": "-",
+      "U": "..-", "V": "...-", "W": ".--", "X": "-..-",
+      "Y": "-.--", "Z": "--..",
+      "0": "-----", "1": ".----", "2": "..---", "3": "...--",
+      "4": "....-", "5": ".....", "6": "-....", "7": "--...",
+      "8": "---..", "9": "----."
+    };
+
+    let pressStart, currentMorse = '', result = '';
+    let pressTimeout, wordTimeout;
+
+    // === MORSE INPUT LOGIC ===
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space' && !pressStart && isMorseMode) {
+        e.preventDefault();
+        pressStart = new Date().getTime();
+        clearTimeout(pressTimeout);
+        clearTimeout(wordTimeout);
+      }
+    });
+
+    document.addEventListener('keyup', e => {
+      if (e.code === 'Space' && isMorseMode) {
+        e.preventDefault();
+        const duration = new Date().getTime() - pressStart;
+        pressStart = null;
+
+        if (duration < 300) {
+          currentMorse += '.';
+          dotSound.currentTime = 0;
+          dotSound.play();
+        } else {
+          currentMorse += '-';
+          dashSound.currentTime = 0;
+          dashSound.play();
+        }
+
+        morseDisplay.textContent = "Morse: " + currentMorse;
+
+        pressTimeout = setTimeout(() => {
+          const letter = morseMap[currentMorse] || '?';
+          result += letter;
+          resultDisplay.textContent = result;
+          currentMorse = '';
+          morseDisplay.textContent = '';
+        }, 500);
+
+        wordTimeout = setTimeout(() => {
+          result += ' ';
+          resultDisplay.textContent = result;
+        }, 1000);
+      }
+    });
+
+    // === TEXT INPUT LOGIC ===
+    textInput.addEventListener('input', (e) => {
+      const inputText = e.target.value.toUpperCase();
+      textDisplay.textContent = "Text: " + inputText;
+    });
+
+    textInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const inputText = e.target.value.toUpperCase();
+        let morseResult = '';
+        
+        for (let char of inputText) {
+          if (char === ' ') {
+            morseResult += ' / ';
+          } else if (textToMorseMap[char]) {
+            morseResult += textToMorseMap[char] + ' ';
+          } else {
+            morseResult += '? ';
+          }
+        }
+        
+        result = morseResult.trim();
+        resultDisplay.textContent = result;
+        e.target.value = '';
+        textDisplay.textContent = '';
+      }
+    });
+
+    // === CLEAR FUNCTION ===
+    function clearAll() {
+      currentMorse = '';
+      result = '';
+      resultDisplay.textContent = '';
+      morseDisplay.textContent = '';
+      textDisplay.textContent = '';
+      textInput.value = '';
+    }
+
+    clearBtn.addEventListener('click', clearAll);
+  </script>
+</body>
+</html>
