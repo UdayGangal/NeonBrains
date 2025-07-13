@@ -45,16 +45,6 @@
       gap: 1rem;
     }
 
-    .player-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      max-width: 1000px;
-      width: 100%;
-    }
-
     .cassette-container {
       position: relative;
       width: 90vw;
@@ -93,29 +83,6 @@
 
     .song-list li:hover {
       background-color: #333;
-    }
-
-    .disk-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      cursor: pointer;
-    }
-
-    .disk-container img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      animation: none;
-    }
-
-    .spin {
-      animation: spin 2s linear infinite;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
     }
 
     .controls {
@@ -175,12 +142,7 @@
     }
 
     @media (max-width: 600px) {
-      .player-wrapper {
-        flex-direction: column;
-      }
-
-      .cassette-container,
-      .disk-container {
+      .cassette-container {
         width: 90%;
       }
 
@@ -200,15 +162,9 @@
   <input type="text" id="searchBox" placeholder="Search for songs...">
 
   <div class="container">
-    <div class="player-wrapper">
-      <div class="cassette-container">
-        <img src="cassette.jpg" alt="Cassette" id="cassette">
-        <ul class="song-list" id="songList"></ul>
-      </div>
-
-      <div class="disk-container">
-        <img src="disk.jpg" alt="CD Disk" id="cdDisk">
-      </div>
+    <div class="cassette-container">
+      <img src="cassette.jpg" alt="Cassette" id="cassette">
+      <ul class="song-list" id="songList"></ul>
     </div>
 
     <div class="controls">
@@ -239,7 +195,6 @@
     const back = document.getElementById('back');
     const forward = document.getElementById('forward');
     const nowPlaying = document.getElementById('nowPlaying');
-    const cdDisk = document.getElementById('cdDisk');
     const searchBox = document.getElementById('searchBox');
     const equalizer = document.getElementById('equalizer');
     const soundEffect = document.getElementById('soundEffect');
@@ -280,14 +235,8 @@
       }
     });
 
-    cdDisk.addEventListener('click', () => {
-      if (songList.innerHTML.trim() === '') return;
-      songList.style.display = songList.style.display === 'block' ? 'none' : 'block';
-      playSoundEffect();
-    });
-
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.cassette-container') && !e.target.closest('.disk-container')) {
+      if (!e.target.closest('.cassette-container')) {
         songList.style.display = 'none';
       }
     });
@@ -295,11 +244,9 @@
     playPause.addEventListener('click', () => {
       if (audioPlayer.paused) {
         audioPlayer.play();
-        cdDisk.classList.add('spin');
         equalizer.style.display = 'flex';
       } else {
         audioPlayer.pause();
-        cdDisk.classList.remove('spin');
         equalizer.style.display = 'none';
       }
       playSoundEffect();
@@ -323,7 +270,6 @@
       audioPlayer.src = track.previewUrl;
       audioPlayer.play();
       nowPlaying.textContent = `🎵 Now Playing: ${track.trackName} — ${track.artistName}`;
-      cdDisk.classList.add('spin');
       equalizer.style.display = 'flex';
     }
 
@@ -332,12 +278,10 @@
     });
 
     audioPlayer.addEventListener('pause', () => {
-      cdDisk.classList.remove('spin');
       equalizer.style.display = 'none';
     });
 
     audioPlayer.addEventListener('play', () => {
-      cdDisk.classList.add('spin');
       equalizer.style.display = 'flex';
     });
   </script>
