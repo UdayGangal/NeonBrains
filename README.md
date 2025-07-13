@@ -52,9 +52,22 @@ Basic login/signup system to personalize the user experience.
     npm rum dev
 
 ---
+## 📌 TODOs
 
-Add user session persistence
+- [ ] Add user session persistence  
+- [ ] Enhance meme customization  
+- [ ] Add drag-and-drop for music uploads
 
-Enhance meme customization
+---
 
-Add drag-and-drop for music uploads
+## 📬 Contact
+
+If you’d like to get in touch or collaborate, feel free to reach out to the team:
+
+- **[Uday Gangal](https://www.linkedin.com/in/uday-gangal-085877347/)**  
+- **[Shikhar Misra](https://www.linkedin.com/in/shikhar-misra-6a692a278/)**  
+- **[Vishwas Srivastava](www.linkedin.com/in/vishwas-srivastava01)**  
+- **[Swain Mishra](www.linkedin.com/in/swain-mishra)**  
+
+We’d love to hear your feedback or discuss future ideas!
+
