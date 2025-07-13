@@ -6,7 +6,6 @@
   box-sizing: border-box;
 }
 
-html,
 body {
   height: 100%;
   width: 100%;
@@ -21,7 +20,6 @@ body {
   background-attachment: fixed;
   position: relative;
   overflow-x: hidden;
-  z-index: 10;
 }
 
 html {

@@ -1,15 +1,3 @@
-// import React from "react";
-
-// function MorseCode() {
-//   return (
-//     <div>
-//       <h1>Morse Code</h1>
-//     </div>
-//   );
-// }
-
-// export default MorseCode;
-
 import { useEffect, useRef, useState } from "react";
 import "./MorseCode.css";
 import dotSound from "./sounds/dot.mp3";
@@ -27,7 +15,7 @@ export default function MorseCode() {
   const pressTimeoutRef = useRef(null);
   const wordTimeoutRef = useRef(null);
 
-  const morseMap = {
+  const MorseCode = {
     ".-": "A",
     "-...": "B",
     "-.-.": "C",
@@ -67,14 +55,18 @@ export default function MorseCode() {
   };
 
   const textToMorseMap = Object.fromEntries(
-    Object.entries(morseMap).map(([k, v]) => [v, k])
+    Object.entries(MorseCode).map(([k, v]) => [v, k])
   );
 
   useEffect(() => {
-    const ctx = canvasRef.current.getContext("2d");
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
     const fontSize = 14;
-    let width = (canvasRef.current.width = window.innerWidth);
-    let height = (canvasRef.current.height = window.innerHeight);
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
     const columns = Math.floor(width / fontSize);
     const drops = Array(columns).fill(1);
     const letters =
@@ -83,7 +75,7 @@ export default function MorseCode() {
     const draw = () => {
       ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = isRedTheme ? "#F00" : "#0F0";
+      ctx.fillStyle = isRedTheme ? "#ff0000" : "#00ff00";
       ctx.font = `${fontSize}px VT323`;
 
       for (let i = 0; i < drops.length; i++) {
@@ -99,12 +91,18 @@ export default function MorseCode() {
     };
 
     const interval = setInterval(draw, 50);
-    window.addEventListener("resize", () => {
-      width = canvasRef.current.width = window.innerWidth;
-      height = canvasRef.current.height = window.innerHeight;
-    });
 
-    return () => clearInterval(interval);
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("resize", handleResize);
+    };
   }, [isRedTheme]);
 
   useEffect(() => {
@@ -118,13 +116,13 @@ export default function MorseCode() {
       index++;
 
       if (index < text.length) {
-        animationFrameId = setTimeout(type, 100); // typing delay
+        animationFrameId = setTimeout(type, 100);
       } else {
         resetTimeoutId = setTimeout(() => {
           index = 0;
           setHeading("");
           type();
-        }, 2000); // pause after full string
+        }, 2000);
       }
     };
 
@@ -141,18 +139,19 @@ export default function MorseCode() {
       if (e.code === "Space" && !pressStartRef.current && isMorseMode) {
         e.preventDefault();
         pressStartRef.current = Date.now();
-        clearTimeout(pressTimeoutRef.current);
-        clearTimeout(wordTimeoutRef.current);
+        if (pressTimeoutRef.current) clearTimeout(pressTimeoutRef.current);
+        if (wordTimeoutRef.current) clearTimeout(wordTimeoutRef.current);
       }
     };
 
     const handleKeyUp = (e) => {
-      if (e.code === "Space" && isMorseMode) {
+      if (e.code === "Space" && isMorseMode && pressStartRef.current) {
         e.preventDefault();
         const duration = Date.now() - pressStartRef.current;
         pressStartRef.current = null;
 
         const signal = duration < 300 ? "." : "-";
+
         const audio = new Audio(signal === "." ? dotSound : dashSound);
         audio.play();
 
@@ -160,7 +159,7 @@ export default function MorseCode() {
         setCurrentMorse(updatedMorse);
 
         pressTimeoutRef.current = setTimeout(() => {
-          const letter = morseMap[updatedMorse] || "?";
+          const letter = MorseCode[updatedMorse] || "?";
           setResult((prev) => prev + letter);
           setCurrentMorse("");
         }, 500);
@@ -173,6 +172,7 @@ export default function MorseCode() {
 
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
+
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
@@ -200,82 +200,100 @@ export default function MorseCode() {
     setIsMorseMode((prev) => !prev);
     clearAll();
   };
+
   const clearAll = () => {
     setCurrentMorse("");
     setResult("");
     setTextInputValue("");
+    if (pressTimeoutRef.current) clearTimeout(pressTimeoutRef.current);
+    if (wordTimeoutRef.current) clearTimeout(wordTimeoutRef.current);
   };
 
   return (
     <div
-      className={`w-full h-full p-10 font-mono text-[20px] ${
+      className={`terminal-container ${
         isRedTheme ? "red-theme" : "green-theme"
       }`}
     >
       <canvas
         ref={canvasRef}
-        id="matrixCanvas"
-        className="fixed top-0 left-0 w-full h-full z-[-1] opacity-50 pointer-events-none"
+        className="matrix-canvas"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 1,
+          opacity: 0.6,
+          pointerEvents: "none",
+        }}
       />
 
-      <button
-        onClick={toggleTheme}
-        className="fixed top-2 left-5 border-2 px-3 py-1 font-mono z-10"
-      >
-        Theme
-      </button>
-      <button
-        onClick={clearAll}
-        className="fixed top-2 right-5 border-2 px-3 py-1 font-mono z-10"
-      >
-        Clear
-      </button>
-      <button
-        onClick={toggleMode}
-        className="fixed top-14 left-5 border-2 px-3 py-1 font-mono z-10"
-      >
-        {isMorseMode ? "Text Mode" : "Morse Mode"}
-      </button>
+      <div className="content-overlay">
+        <button
+          onClick={toggleTheme}
+          className="terminal-button"
+          style={{ position: "absolute", top: "20px", left: "20px" }}
+        >
+          Theme
+        </button>
 
-      <h1 className="text-center text-2xl border-r-2 overflow-hidden whitespace-nowrap animate-typing blink-caret w-fit mx-auto">
-        {heading}
-      </h1>
-      <p className="text-sm text-secondary">
-        Press and hold <strong>SPACEBAR</strong> to input Morse Code
-      </p>
-      <p className="text-sm text-secondary">
-        Short = · , Long = − , Pause = new letter
-      </p>
+        <button
+          onClick={clearAll}
+          className="terminal-button"
+          style={{ position: "absolute", top: "20px", right: "20px" }}
+        >
+          Clear
+        </button>
 
-      {!isMorseMode && (
-        <>
-          <div className="fixed bottom-[150px] left-8 text-sm text-secondary">
-            Type text and press Enter to convert to Morse:
+        <button
+          onClick={toggleMode}
+          className="terminal-button"
+          style={{ position: "absolute", top: "70px", left: "20px" }}
+        >
+          {isMorseMode ? "Text Mode" : "Morse Mode"}
+        </button>
+
+        <div className="header-section">
+          <h1 className="title">{heading}</h1>
+          <div className="instructions">
+            Press and hold SPACEBAR to input Morse Code
           </div>
-          <input
-            type="text"
-            value={textInputValue}
-            onChange={handleTextInput}
-            onKeyDown={handleTextSubmit}
-            className="fixed bottom-[100px] left-8 w-[300px] border-2 p-2 bg-transparent font-mono"
-            placeholder="Enter text here..."
-            autoFocus
-          />
-        </>
-      )}
+          <div className="instructions">
+            Short = ·, Long = -, Pause = new letter
+          </div>
+        </div>
 
-      {isMorseMode && (
-        <div className="mt-[100px] px-6">Morse: {currentMorse}</div>
-      )}
-      {!isMorseMode && (
-        <div className="mt-[100px] px-6">Text: {textInputValue}</div>
-      )}
+        <div className="current-input-display">
+          {isMorseMode
+            ? currentMorse && <div>Morse: {currentMorse}</div>
+            : textInputValue && <div>Text: {textInputValue}</div>}
+        </div>
 
-      <div className="fixed bottom-8 left-8 text-2xl flex items-end">
-        <div className="whitespace-pre-wrap max-w-[90%]">{result}</div>
-        <span className="inline-block w-2 h-[26px] bg-current ml-1 animate-blink">
-          █
-        </span>
+        {!isMorseMode && (
+          <div className="text-input-section">
+            <div style={{ marginBottom: "10px", fontSize: "16px" }}>
+              Type text and press Enter to convert to Morse:
+            </div>
+            <input
+              type="text"
+              value={textInputValue}
+              onChange={handleTextInput}
+              onKeyDown={handleTextSubmit}
+              className="text-input"
+              placeholder="Enter text here..."
+              autoFocus
+            />
+          </div>
+        )}
+
+        <div className="morse-display">
+          <div style={{ whiteSpace: "pre-wrap", maxWidth: "90%" }}>
+            {result}
+          </div>
+          <span className="cursor">█</span>
+        </div>
       </div>
     </div>
   );

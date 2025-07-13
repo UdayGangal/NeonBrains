@@ -116,7 +116,7 @@ const MemorixApp = () => {
               <a href="/music">Music</a>
             </li>
             <li>
-              <a href="/polaroid">Meme</a>
+              <a href="/polaroid">Polaroid Meme</a>
             </li>
           </ul>
         </nav>
@@ -178,7 +178,7 @@ const MemorixApp = () => {
           </a>
           <a href="/polaroid" className="glass-box-link">
             <div className="glass-box">
-              <h2>Meme</h2>
+              <h2>Polaroid Meme</h2>
               <p>
                 Generate funny memes
                 <br />
