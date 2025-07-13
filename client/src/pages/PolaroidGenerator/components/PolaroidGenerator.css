@@ -1,0 +1,285 @@
+/* PolaroidGenerator component styles */
+.polaroid-generator-container {
+  background: linear-gradient(to bottom right, #1e3a8a, #312e81);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #06b6d4;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.generator-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #a5f3fc;
+  margin-bottom: 1rem;
+}
+
+/* Frame Style Selector */
+.frame-section {
+  margin-bottom: 1.5rem;
+}
+
+.frame-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #f9a8d4;
+  margin-bottom: 0.75rem;
+}
+
+.frame-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .frame-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.frame-button {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.frame-button.active {
+  background: linear-gradient(to right, #fbbf24, #f97316);
+  color: black;
+}
+
+.frame-button.inactive {
+  background: linear-gradient(to right, #4b5563, #374151);
+  color: white;
+}
+
+.frame-button.inactive:hover {
+  background: linear-gradient(to right, #6b7280, #4b5563);
+}
+
+/* Caption Section */
+.caption-section {
+  margin-bottom: 1.5rem;
+}
+
+.caption-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.caption-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #f9a8d4;
+}
+
+.random-button {
+  background: linear-gradient(to right, #8b5cf6, #3b82f6);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.random-button:hover {
+  background: linear-gradient(to right, #a78bfa, #60a5fa);
+}
+
+.caption-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background: #1f2937;
+  border: 2px solid #8b5cf6;
+  border-radius: 0.5rem;
+  color: white;
+  resize: none;
+  transition: border-color 0.3s ease;
+}
+
+.caption-textarea:focus {
+  border-color: #06b6d4;
+  outline: none;
+}
+
+.caption-textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Polaroid Preview */
+.polaroid-preview {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.polaroid-frame {
+  padding: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: rotate(0.25deg);
+  transition: transform 0.3s ease;
+  width: 300px;
+  border: 4px solid;
+}
+
+.polaroid-frame:hover {
+  transform: rotate(0deg);
+}
+
+.polaroid-frame.classic {
+  background: white;
+  color: #1f2937;
+  border-color: #e5e7eb;
+}
+
+.polaroid-frame.neon {
+  background: linear-gradient(to bottom right, #581c87, #be185d);
+  color: #a5f3fc;
+  border-color: #06b6d4;
+}
+
+.polaroid-frame.cyberpunk {
+  background: linear-gradient(to bottom right, #111827, #000000);
+  color: #22c55e;
+  border-color: #22c55e;
+}
+
+.polaroid-frame.vintage {
+  background: linear-gradient(to bottom right, #fef3c7, #fde68a);
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.polaroid-photo {
+  position: relative;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border-radius: 0.125rem;
+}
+
+.polaroid-image {
+  width: 100%;
+  height: 16rem;
+  object-fit: cover;
+}
+
+/* Retro overlay effects */
+.neon-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top right,
+    rgba(139, 92, 246, 0.2),
+    rgba(6, 182, 212, 0.2)
+  );
+  pointer-events: none;
+}
+
+.cyberpunk-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    rgba(34, 197, 94, 0.1),
+    rgba(59, 130, 246, 0.1)
+  );
+  pointer-events: none;
+}
+
+.scanlines-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.scanline-overlay {
+  position: absolute;
+  width: 100%;
+  height: 0.125rem;
+  background: currentColor;
+}
+
+.polaroid-caption {
+  text-align: center;
+}
+
+.caption-text {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.caption-placeholder {
+  font-size: 0.875rem;
+  opacity: 0.5;
+}
+
+.polaroid-decorations {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+  gap: 0.5rem;
+}
+
+.decoration-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  opacity: 0.3;
+}
+
+/* Download Button */
+.download-section {
+  display: flex;
+  justify-content: center;
+}
+
+.download-button {
+  background: linear-gradient(to right, #10b981, #14b8a6);
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  transform: scale(1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.download-button:hover:not(:disabled) {
+  background: linear-gradient(to right, #34d399, #2dd4bf);
+  transform: scale(1.05);
+}
+
+.download-button:disabled {
+  background: linear-gradient(to right, #6b7280, #4b5563);
+  transform: scale(1);
+  cursor: not-allowed;
+}
+
+.download-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.download-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
