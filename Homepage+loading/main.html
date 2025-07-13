@@ -348,7 +348,7 @@
     <button id="soundToggle">🔈 Sound On</button>
      <audio id="fire-audio" src="fire.mp3" loop></audio>
      <audio id="wind-audio" src="WIND.mp3" loop></audio>
-     <audio id="jugnu-audio" src="jugnu.mp3" loop></audio>
+     <audio id="jugnu-audio" src="fireflie.mp3" loop></audio>
 
   <!-- Navigation Bar -->
 <nav class="navbar">
@@ -440,8 +440,8 @@
   soundToggle.addEventListener("click", () => {
     if (!soundOn) {
       fire.volume = 0.2;
-      wind.volume = 0.9;
-      jugnu.volume = 0.1;
+      wind.volume = 0.6;
+      jugnu.volume = 0.6;
 
       fire.play();
       wind.play();
