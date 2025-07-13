@@ -337,18 +337,13 @@
   margin: 0;
 }
 
-.glass-box:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
-}
-
   </style>
 </head>
 <body>
     <button id="soundToggle">🔈 Sound On</button>
-     <audio id="fire-audio" src="fire.mp3" loop></audio>
-     <audio id="wind-audio" src="WIND.mp3" loop></audio>
-     <audio id="jugnu-audio" src="fireflie.mp3" loop></audio>
+     <audio id="fire-audio" src="fire.mp3" loop preload="auto"></audio>
+     <audio id="wind-audio" src="WIND.mp3" loop preload="auto"></audio>
+     <audio id="jugnu-audio" src="fireflie.mp3" loop preload="auto"></audio>
 
   <!-- Navigation Bar -->
 <nav class="navbar">
@@ -430,37 +425,78 @@
 
       starContainer.appendChild(star);
     }
-  const fire = document.getElementById("fire-audio");
-  const wind = document.getElementById("wind-audio");
-  const jugnu = document.getElementById("jugnu-audio");
-  const soundToggle = document.getElementById("soundToggle");
 
-  let soundOn = false;
+    // Audio elements
+    const fire = document.getElementById("fire-audio");
+    const wind = document.getElementById("wind-audio");
+    const jugnu = document.getElementById("jugnu-audio");
+    const soundToggle = document.getElementById("soundToggle");
 
-  soundToggle.addEventListener("click", () => {
-    if (!soundOn) {
-      fire.volume = 0.2;
-      wind.volume = 0.6;
-      jugnu.volume = 0.6;
+    let soundOn = false;
 
-      fire.play();
-      wind.play();
-      jugnu.play();
+    // Set volumes
+    fire.volume = 0.2;
+    wind.volume = 0.6;
+    jugnu.volume = 0.6;
 
-      soundToggle.textContent = "🔇 Sound Off";
-      soundOn = true;
-    } else {
+    // Function to play all sounds simultaneously
+    async function playAllSounds() {
+      try {
+        // Use Promise.all to start all sounds at exactly the same time
+        await Promise.all([
+          fire.play(),
+          wind.play(),
+          jugnu.play()
+        ]);
+        console.log("All sounds playing");
+      } catch (error) {
+        console.error("Error playing sounds:", error);
+      }
+    }
+
+    // Function to pause all sounds
+    function pauseAllSounds() {
       fire.pause();
       wind.pause();
       jugnu.pause();
-
-      soundToggle.textContent = "🔈 Sound On";
-      soundOn = false;
+      
+      // Reset to beginning for next play
+      fire.currentTime = 0;
+      wind.currentTime = 0;
+      jugnu.currentTime = 0;
     }
-  });
 
+    // Event listener for sound toggle
+    soundToggle.addEventListener("click", async () => {
+      if (!soundOn) {
+        await playAllSounds();
+        soundToggle.textContent = "🔇 Sound Off";
+        soundOn = true;
+      } else {
+        pauseAllSounds();
+        soundToggle.textContent = "🔈 Sound On";
+        soundOn = false;
+      }
+    });
 
-  
+    // Handle audio loading and ensure seamless looping
+    [fire, wind, jugnu].forEach(audio => {
+      audio.addEventListener('loadeddata', () => {
+        console.log(`${audio.id} loaded successfully`);
+      });
+      
+      audio.addEventListener('canplaythrough', () => {
+        console.log(`${audio.id} ready to play`);
+      });
+      
+      // Ensure seamless looping
+      audio.addEventListener('ended', () => {
+        if (soundOn) {
+          audio.currentTime = 0;
+          audio.play();
+        }
+      });
+    });
 
   </script>
 </body>
