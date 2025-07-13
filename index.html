@@ -86,17 +86,32 @@
       position: relative;
     }
 
+    .volume-control {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 1rem;
+      color: #0ff;
+      font-size: 0.5rem;
+    }
+
+    .volume-control input[type=range] {
+      writing-mode: bt-lr;
+      -webkit-appearance: slider-vertical;
+      width: 8px;
+      height: 120px;
+      background: transparent;
+      border-radius: 5px;
+      outline: none;
+      accent-color: #0ff;
+    }
+
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1rem;
       flex: 1;
-    }
-
-    .cassette-container {
-      width: 90vw;
-      max-width: 600px;
     }
 
     .cassette-container img {
@@ -111,6 +126,11 @@
     .cassette-container img:hover {
       transform: scale(1.03);
       box-shadow: 0 0 25px #fef200;
+    }
+
+    .cassette-container {
+      width: 90vw;
+      max-width: 600px;
     }
 
     .controls {
@@ -202,6 +222,19 @@
         margin-top: 1rem;
         width: 90%;
       }
+
+      .volume-control {
+        margin-right: 0;
+        margin-bottom: 1rem;
+        flex-direction: row;
+        gap: 10px;
+      }
+
+      .volume-control input[type=range] {
+        writing-mode: horizontal-tb;
+        height: auto;
+        width: 100px;
+      }
     }
 
     /* Themes */
@@ -248,6 +281,11 @@
   <input type="text" id="searchBox" placeholder="Search for songs...">
 
   <div class="main-section">
+    <div class="volume-control">
+      <label for="volumeSlider">🔊</label>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+    </div>
+
     <div class="container">
       <div class="cassette-container">
         <img src="cassette.jpg" alt="Cassette" id="cassette">
@@ -288,6 +326,7 @@
     const soundEffect = document.getElementById('soundEffect');
     const themeSelector = document.getElementById('themeSelector');
     const playlistQueue = document.getElementById('playlistQueue');
+    const volumeSlider = document.getElementById('volumeSlider');
     const body = document.body;
 
     let tracks = [];
@@ -374,6 +413,10 @@
 
     themeSelector.addEventListener('change', (e) => {
       body.className = e.target.value;
+    });
+
+    volumeSlider.addEventListener('input', () => {
+      audioPlayer.volume = volumeSlider.value;
     });
 
     function playSoundEffect() {
