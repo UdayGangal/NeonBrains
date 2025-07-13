@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
-import { Camera, Upload, RefreshCw, Download } from "lucide-react";
+import { Camera, Upload, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 
 // interface ImageUploadProps {
