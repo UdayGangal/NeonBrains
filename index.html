@@ -6,6 +6,11 @@
   <title>Retro Walkman Music Player</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --color-text: #fef200;
+      --color-bg: #000;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -14,33 +19,59 @@
 
     body {
       font-family: 'Press Start 2P', cursive;
-      text-align: center;
-      padding: 2rem;
-      overflow-x: hidden;
+      padding: 2rem 1rem;
+      min-height: 100vh;
       transition: background 0.6s, color 0.6s;
+      background: var(--color-bg);
+      color: var(--color-text);
     }
 
-    h1 {
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      text-shadow: 0 0 5px #ff0054;
+    .theme-selector {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 10;
     }
 
     #themeSelector {
-      margin-bottom: 1rem;
       font-size: 0.6rem;
       padding: 0.4rem;
+      border-radius: 6px;
       font-family: 'Press Start 2P', cursive;
+      border: 2px solid #fef200;
+      background-color: #111;
+      color: #fef200;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #ff0054;
+      text-shadow: 0 0 10px #ff0054, 0 0 20px #fef200;
+      margin-bottom: 2rem;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #ff0054, 0 0 10px #fef200;
+      }
+      to {
+        text-shadow: 0 0 15px #ff0054, 0 0 25px #fef200;
+      }
     }
 
     #searchBox {
+      display: block;
+      margin: 0 auto 1.5rem auto;
       padding: 0.5rem;
       width: 80%;
       max-width: 400px;
       font-size: 0.8rem;
-      margin-bottom: 1rem;
       border: 2px solid #fef200;
       border-radius: 6px;
+      background-color: #111;
+      color: #0ff;
     }
 
     .container {
@@ -58,15 +89,16 @@
 
     .cassette-container img {
       width: 100%;
-      height: auto;
-      border: 3px solid #fef200;
+      border: 4px solid #fef200;
       border-radius: 12px;
       cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 20px #00ffc3;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .cassette-container img:hover {
-      transform: scale(1.02);
+      transform: scale(1.03);
+      box-shadow: 0 0 25px #fef200;
     }
 
     .song-list {
@@ -86,6 +118,7 @@
     .song-list li {
       padding: 10px;
       cursor: pointer;
+      color: #00ffc3;
       border-bottom: 1px solid #333;
     }
 
@@ -94,21 +127,27 @@
     }
 
     .controls {
-      margin-top: 1rem;
+      margin-top: 1.2rem;
     }
 
     .controls button {
+      background-color: #ff0054;
+      border: 2px solid #fef200;
+      color: white;
       font-size: 0.7rem;
       padding: 0.6rem 1rem;
       margin: 0 0.5rem;
       cursor: pointer;
       border-radius: 8px;
       font-family: 'Press Start 2P', cursive;
-      transition: transform 0.1s ease-in-out, box-shadow 0.2s;
+      transition: transform 0.1s ease-in-out, box-shadow 0.2s ease;
+      box-shadow: 0 0 8px #ff0054;
     }
 
-    .controls button:active {
-      transform: scale(0.95);
+    .controls button:hover {
+      background-color: #fef200;
+      color: #000;
+      box-shadow: 0 0 10px #fef200;
     }
 
     .equalizer {
@@ -121,6 +160,7 @@
     .bar {
       width: 6px;
       height: 20px;
+      background: #00ffc3;
       animation: equalize 1s infinite ease-in-out;
     }
 
@@ -138,145 +178,34 @@
     #nowPlaying {
       margin-top: 1rem;
       font-size: 0.7rem;
+      text-shadow: 0 0 5px #0ff;
     }
 
     @media (max-width: 600px) {
-      .cassette-container {
-        width: 90%;
-      }
-
-      .song-list {
-        font-size: 0.5rem;
-      }
-
       .controls button {
         font-size: 0.5rem;
         padding: 0.4rem 0.6rem;
       }
     }
 
-    /* THEMES */
-
-    /* Dark Theme */
+    /* Theme Classes */
     .dark {
-      background: #000;
-      color: #fef200;
+      --color-bg: #000;
+      --color-text: #fef200;
     }
 
-    .dark h1 {
-      color: #ff0054;
-    }
-
-    .dark #searchBox {
-      background-color: #111;
-      color: #0ff;
-    }
-
-    .dark .cassette-container img {
-      box-shadow: 0 0 20px #0ff;
-    }
-
-    .dark .song-list {
-      background-color: #111;
-      color: #00ffc3;
-    }
-
-    .dark .bar {
-      background: #00ffc3;
-    }
-
-    .dark .controls button {
-      background-color: #ff0054;
-      color: white;
-      border: 2px solid #fef200;
-      box-shadow: 0 0 8px #ff0054;
-    }
-
-    .dark .controls button:hover {
-      background-color: #fef200;
-      color: #000;
-    }
-
-    /* Light Theme */
     .light {
-      background: #fff;
-      color: #000;
+      --color-bg: #fdfdfd;
+      --color-text: #222;
     }
 
-    .light #searchBox {
-      background-color: #eee;
-      color: #000;
-      border: 2px solid #000;
-    }
-
-    .light .cassette-container img {
-      box-shadow: 0 0 10px #999;
-    }
-
-    .light .song-list {
-      background-color: #f0f0f0;
-      color: #333;
-      border: 2px solid #000;
-    }
-
-    .light .bar {
-      background: #333;
-    }
-
-    .light .controls button {
-      background-color: #000;
-      color: #fff;
-      border: 2px solid #000;
-    }
-
-    .light .controls button:hover {
-      background-color: #ccc;
-      color: #000;
-    }
-
-    /* Retro Theme */
     .retro {
+      --color-bg: #000;
+      --color-text: #fef200;
       background-image: radial-gradient(#0ff 1px, transparent 1px), radial-gradient(#f0f 1px, transparent 1px);
       background-size: 40px 40px;
       background-position: 0 0, 20px 20px;
-      animation: moveGrid 8s linear infinite;
-      color: #fef200;
-    }
-
-    .retro h1 {
-      color: #ff0054;
-    }
-
-    .retro #searchBox {
-      background-color: #111;
-      color: #0ff;
-      border: 2px solid #fef200;
-    }
-
-    .retro .cassette-container img {
-      box-shadow: 0 0 20px #f0f;
-    }
-
-    .retro .song-list {
-      background-color: #111;
-      color: #00ffc3;
-      border: 2px solid #fef200;
-    }
-
-    .retro .bar {
-      background: #00ffc3;
-    }
-
-    .retro .controls button {
-      background-color: #ff0054;
-      color: white;
-      border: 2px solid #fef200;
-      box-shadow: 0 0 8px #ff0054;
-    }
-
-    .retro .controls button:hover {
-      background-color: #fef200;
-      color: #000;
+      animation: moveGrid 12s linear infinite;
     }
 
     @keyframes moveGrid {
@@ -290,12 +219,16 @@
   </style>
 </head>
 <body class="retro">
+  <div class="theme-selector">
+    <select id="themeSelector">
+      <option value="retro" selected>🎮 Retro 80s</option>
+      <option value="dark">🌙 Dark</option>
+      <option value="light">🌞 Light</option>
+    </select>
+  </div>
+
   <h1>📼 Retro Walkman Music Player</h1>
-  <select id="themeSelector">
-    <option value="retro" selected>🎮 Retro 80s</option>
-    <option value="dark">🌙 Dark</option>
-    <option value="light">🌞 Light</option>
-  </select>
+
   <input type="text" id="searchBox" placeholder="Search for songs...">
 
   <div class="container">
@@ -411,14 +344,14 @@
     audioPlayer.addEventListener('pause', () => equalizer.style.display = 'none');
     audioPlayer.addEventListener('play', () => equalizer.style.display = 'flex');
 
+    themeSelector.addEventListener('change', (e) => {
+      body.className = e.target.value;
+    });
+
     function playSoundEffect() {
       soundEffect.currentTime = 0;
       soundEffect.play();
     }
-
-    themeSelector.addEventListener('change', (e) => {
-      body.className = e.target.value;
-    });
   </script>
 </body>
 </html>
