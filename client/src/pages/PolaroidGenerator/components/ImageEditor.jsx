@@ -11,8 +11,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import "react-image-crop/dist/ReactCrop.css";
-import "../styles/imageEditor.css"; // Assuming you have a CSS file for styling
-import "../styles/shared.css"; // Assuming you have a CSS file for pixel font
+import "./ImageEditor.css"; // Ensure you have this CSS file for styles
+import "./shared.css"; // Assuming you have a CSS file for pixel font
 
 // interface ImageEditorProps {
 //   imageSrc: string;

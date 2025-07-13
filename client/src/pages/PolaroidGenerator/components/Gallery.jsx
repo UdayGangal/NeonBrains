@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Trash2, Download, Eye, Calendar } from "lucide-react";
 import toast from "react-hot-toast";
-import "../styles/gallery.css"; // Assuming you have a CSS file for styling
-import "../styles/shared.css"; // Assuming you have a CSS file for pixel font
+import "./Gallery.css"; // Assuming you have a CSS file for styling
+import "./shared.css"; // Assuming you have a CSS file for pixel font
 const Gallery = () => {
   const [savedPolaroids, setSavedPolaroids] = useState([]);
   const [selectedPolaroid, setSelectedPolaroid] = useState(null);

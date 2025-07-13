@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
-import "../styles/RetroBackground.css";
+import "./RetroBackground.css"; // Ensure you have this CSS file for styles
 
 const ParticleField = () => {
   const ref = useRef(null);

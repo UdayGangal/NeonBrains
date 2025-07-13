@@ -2,8 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import html2canvas from "html2canvas";
 import { Download, RefreshCw, Sparkles, Heart, Star } from "lucide-react";
 import toast from "react-hot-toast";
-import "../styles/PolaroidGenerator.css";
-import "../styles/shared.css";
+import "./PolaroidGenerator.css";
+import "./shared.css";
 // interface PolaroidGeneratorProps {
 //   imageSrc: string;
 //   filters: {
