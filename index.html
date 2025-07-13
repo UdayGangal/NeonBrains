@@ -13,19 +13,24 @@
     }
 
     body {
-      background-color: #0f0f0f;
-      background-image: linear-gradient(45deg, #222 25%, #111 25%, #111 50%, #222 50%, #222 75%, #111 75%, #111);
-      background-size: 40px 40px;
       font-family: 'Press Start 2P', cursive;
-      color: #fef200;
       text-align: center;
       padding: 2rem;
+      overflow-x: hidden;
+      transition: background 0.6s, color 0.6s;
     }
 
     h1 {
       margin-bottom: 1rem;
       font-size: 1rem;
-      color: #ff0054;
+      text-shadow: 0 0 5px #ff0054;
+    }
+
+    #themeSelector {
+      margin-bottom: 1rem;
+      font-size: 0.6rem;
+      padding: 0.4rem;
+      font-family: 'Press Start 2P', cursive;
     }
 
     #searchBox {
@@ -57,7 +62,11 @@
       border: 3px solid #fef200;
       border-radius: 12px;
       cursor: pointer;
-      box-shadow: 0 0 20px #fef200;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .cassette-container img:hover {
+      transform: scale(1.02);
     }
 
     .song-list {
@@ -77,7 +86,6 @@
     .song-list li {
       padding: 10px;
       cursor: pointer;
-      color: #00ffc3;
       border-bottom: 1px solid #333;
     }
 
@@ -90,25 +98,17 @@
     }
 
     .controls button {
-      background-color: #ff0054;
-      border: 2px solid #fef200;
-      color: white;
       font-size: 0.7rem;
       padding: 0.6rem 1rem;
       margin: 0 0.5rem;
       cursor: pointer;
       border-radius: 8px;
       font-family: 'Press Start 2P', cursive;
-      transition: transform 0.1s ease-in-out;
+      transition: transform 0.1s ease-in-out, box-shadow 0.2s;
     }
 
     .controls button:active {
       transform: scale(0.95);
-    }
-
-    .controls button:hover {
-      background-color: #fef200;
-      color: #000;
     }
 
     .equalizer {
@@ -121,8 +121,7 @@
     .bar {
       width: 6px;
       height: 20px;
-      background: #00ffc3;
-      animation: equalize 1s infinite;
+      animation: equalize 1s infinite ease-in-out;
     }
 
     .bar:nth-child(1) { animation-delay: 0s; }
@@ -155,10 +154,148 @@
         padding: 0.4rem 0.6rem;
       }
     }
+
+    /* THEMES */
+
+    /* Dark Theme */
+    .dark {
+      background: #000;
+      color: #fef200;
+    }
+
+    .dark h1 {
+      color: #ff0054;
+    }
+
+    .dark #searchBox {
+      background-color: #111;
+      color: #0ff;
+    }
+
+    .dark .cassette-container img {
+      box-shadow: 0 0 20px #0ff;
+    }
+
+    .dark .song-list {
+      background-color: #111;
+      color: #00ffc3;
+    }
+
+    .dark .bar {
+      background: #00ffc3;
+    }
+
+    .dark .controls button {
+      background-color: #ff0054;
+      color: white;
+      border: 2px solid #fef200;
+      box-shadow: 0 0 8px #ff0054;
+    }
+
+    .dark .controls button:hover {
+      background-color: #fef200;
+      color: #000;
+    }
+
+    /* Light Theme */
+    .light {
+      background: #fff;
+      color: #000;
+    }
+
+    .light #searchBox {
+      background-color: #eee;
+      color: #000;
+      border: 2px solid #000;
+    }
+
+    .light .cassette-container img {
+      box-shadow: 0 0 10px #999;
+    }
+
+    .light .song-list {
+      background-color: #f0f0f0;
+      color: #333;
+      border: 2px solid #000;
+    }
+
+    .light .bar {
+      background: #333;
+    }
+
+    .light .controls button {
+      background-color: #000;
+      color: #fff;
+      border: 2px solid #000;
+    }
+
+    .light .controls button:hover {
+      background-color: #ccc;
+      color: #000;
+    }
+
+    /* Retro Theme */
+    .retro {
+      background-image: radial-gradient(#0ff 1px, transparent 1px), radial-gradient(#f0f 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      animation: moveGrid 8s linear infinite;
+      color: #fef200;
+    }
+
+    .retro h1 {
+      color: #ff0054;
+    }
+
+    .retro #searchBox {
+      background-color: #111;
+      color: #0ff;
+      border: 2px solid #fef200;
+    }
+
+    .retro .cassette-container img {
+      box-shadow: 0 0 20px #f0f;
+    }
+
+    .retro .song-list {
+      background-color: #111;
+      color: #00ffc3;
+      border: 2px solid #fef200;
+    }
+
+    .retro .bar {
+      background: #00ffc3;
+    }
+
+    .retro .controls button {
+      background-color: #ff0054;
+      color: white;
+      border: 2px solid #fef200;
+      box-shadow: 0 0 8px #ff0054;
+    }
+
+    .retro .controls button:hover {
+      background-color: #fef200;
+      color: #000;
+    }
+
+    @keyframes moveGrid {
+      0% {
+        background-position: 0 0, 20px 20px;
+      }
+      100% {
+        background-position: 40px 40px, 60px 60px;
+      }
+    }
   </style>
 </head>
-<body>
+<body class="retro">
   <h1>📼 Retro Walkman Music Player</h1>
+  <select id="themeSelector">
+    <option value="retro" selected>🎮 Retro 80s</option>
+    <option value="dark">🌙 Dark</option>
+    <option value="light">🌞 Light</option>
+  </select>
   <input type="text" id="searchBox" placeholder="Search for songs...">
 
   <div class="container">
@@ -198,14 +335,11 @@
     const searchBox = document.getElementById('searchBox');
     const equalizer = document.getElementById('equalizer');
     const soundEffect = document.getElementById('soundEffect');
+    const themeSelector = document.getElementById('themeSelector');
+    const body = document.body;
 
     let tracks = [];
     let currentTrackIndex = 0;
-
-    function playSoundEffect() {
-      soundEffect.currentTime = 0;
-      soundEffect.play();
-    }
 
     cassette.addEventListener('click', async () => {
       const query = searchBox.value || prompt("Search for music:");
@@ -273,16 +407,17 @@
       equalizer.style.display = 'flex';
     }
 
-    audioPlayer.addEventListener('ended', () => {
-      forward.click();
-    });
+    audioPlayer.addEventListener('ended', () => forward.click());
+    audioPlayer.addEventListener('pause', () => equalizer.style.display = 'none');
+    audioPlayer.addEventListener('play', () => equalizer.style.display = 'flex');
 
-    audioPlayer.addEventListener('pause', () => {
-      equalizer.style.display = 'none';
-    });
+    function playSoundEffect() {
+      soundEffect.currentTime = 0;
+      soundEffect.play();
+    }
 
-    audioPlayer.addEventListener('play', () => {
-      equalizer.style.display = 'flex';
+    themeSelector.addEventListener('change', (e) => {
+      body.className = e.target.value;
     });
   </script>
 </body>
