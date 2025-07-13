@@ -1,13 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 
-body {
+/* body {
   margin: 0;
   padding: 0;
   background-color: black;
   color: #0f0;
   font-family: "VT323", monospace;
   overflow: hidden;
-}
+} */
 
 .animate-type {
   animation: typing 3s steps(30, end) forwards,
