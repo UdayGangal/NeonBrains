@@ -205,17 +205,19 @@ const MemorixApp = () => {
             >
               &times;
             </button>
-            <div className="about-header">
+            <div class="about-header">
               <h1>About Us</h1>
               <p>
                 Memorix was crafted during the "Blast from the Past" hackathon —
                 a cozy retro-campfire themed platform featuring Morse-based
                 communication, ambient night music, and a nostalgic meme
-                generator.
+                generator. It's an interactive journey powered by creativity and
+                nostalgia.
               </p>
             </div>
-            <div className="about-content">
-              <div className="about-card">
+
+            <div class="about-content">
+              <div class="about-card">
                 <h3>Key Features</h3>
                 <ul>
                   <li>Morse Code Messenger</li>
@@ -226,23 +228,86 @@ const MemorixApp = () => {
                   </li>
                 </ul>
               </div>
-              <div className="about-card">
+
+              <div class="about-card">
                 <h3>Tech Stack</h3>
                 <ul>
-                  <li>React.js, Node.js, Tailwind, JWT</li>
-                  <li>Web Audio API & Canvas</li>
-                  <li>CSS Grid & Flexbox</li>
+                  <li>HTML5, CSS3, JavaScript</li>
+                  <li>React.js for modular routing and state</li>
+                  <li>Web Audio API for immersive sounds</li>
+                  <li>Pixel Art Assets, Canvas Animations</li>
+                  <li>Responsive Design with CSS Grid/Flexbox</li>
                 </ul>
               </div>
             </div>
-            <div className="team-section">
+
+            <div class="team-section">
               <h3>Team Memorix</h3>
-              <div className="team-grid">
-                {/* Team members listed */}
-                {/* Add all your team members here as shown earlier */}
+              <div class="team-grid">
+                <div class="team-member">
+                  <h4>Uday Gangal</h4>
+                  <p>
+                    <a href="https://github.com/UdayGangal" target="_blank">
+                      GitHub
+                    </a>{" "}
+                    |{" "}
+                    <a
+                      href="https://www.linkedin.com/in/uday-gangal-085877347/"
+                      target="_blank"
+                    >
+                      LinkedIn
+                    </a>
+                  </p>
+                </div>
+                <div class="team-member">
+                  <h4>Shikhar Misra</h4>
+                  <p>
+                    <a href="https://github.com/Shikhar0misra" target="_blank">
+                      GitHub
+                    </a>{" "}
+                    |{" "}
+                    <a
+                      href="https://www.linkedin.com/in/shikhar-misra-6a692a278/"
+                      target="_blank"
+                    >
+                      LinkedIn
+                    </a>
+                  </p>
+                </div>
+                <div class="team-member">
+                  <h4>Swain Mishra</h4>
+                  <p>
+                    <a href="https://github.com/CyberLearn15a" target="_blank">
+                      GitHub
+                    </a>{" "}
+                    |{" "}
+                    <a
+                      href="https://www.linkedin.com/in/swain-mishra"
+                      target="_blank"
+                    >
+                      LinkedIn
+                    </a>
+                  </p>
+                </div>
+                <div class="team-member">
+                  <h4>Vishwas Srivastava</h4>
+                  <p>
+                    <a href="https://github.com/Vishwas-0612" target="_blank">
+                      GitHub
+                    </a>{" "}
+                    |{" "}
+                    <a
+                      href="https://www.linkedin.com/in/vishwas-srivastava01"
+                      target="_blank"
+                    >
+                      LinkedIn
+                    </a>
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="contact-info">
+
+            <div class="contact-info">
               <h3>Get In Touch</h3>
               <p>Email: memorix.team@gmail.com</p>
               <p>
@@ -250,11 +315,11 @@ const MemorixApp = () => {
                 <a
                   href="https://github.com/UdayGangal/NeonBrains"
                   target="_blank"
-                  rel="noopener noreferrer"
                 >
                   Memorix-Team
                 </a>
               </p>
+              <p>Follow us for updates and future builds</p>
             </div>
           </div>
         </div>
