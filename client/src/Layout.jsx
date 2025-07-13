@@ -8,9 +8,9 @@ function Layout() {
   const noNavFoot = location.pathname === "/login";
   return (
     <>
-      {noNavFoot ? null : <Navbar />}
+      {/* {noNavFoot ? null : <Navbar />} */}
       <Outlet />
-      {noNavFoot ? null : <Footer />}
+      {/* {noNavFoot ? null : <Footer />} */}
     </>
   );
 }

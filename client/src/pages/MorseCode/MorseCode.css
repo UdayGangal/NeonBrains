@@ -1,0 +1,59 @@
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  color: #0f0; /* default to green-theme if not specified */
+  font-family: "VT323", monospace;
+}
+
+.animate-type {
+  animation: typing 3s steps(30, end) forwards,
+    blinkCaret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blinkCaret {
+  50% {
+    border-color: transparent;
+  }
+}
+
+/* Custom blink for cursor */
+@keyframes blink {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s step-start infinite;
+}
+
+.red-theme {
+  --current-secondary: #dd0000;
+}
+
+.text-current-secondary {
+  color: var(--current-secondary);
+}
+
+/* Ensure custom font used globally */
+body {
+  font-family: "VT323", monospace;
+}
