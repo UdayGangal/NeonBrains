@@ -99,7 +99,7 @@ const ImageUpload = ({ onImageCapture }) => {
                 audio={false}
                 screenshotFormat="image/jpeg"
                 videoConstraints={{ facingMode }}
-                className="w-full h-64 object-cover filter contrast-110 brightness-95"
+                className="w-full h-164 object-cover filter contrast-110 brightness-95"
               />
 
               {/* Vintage Camera Viewfinder Overlay */}
