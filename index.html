@@ -24,6 +24,9 @@
       transition: background 0.6s, color 0.6s;
       background: var(--color-bg);
       color: var(--color-text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .theme-selector {
@@ -74,15 +77,24 @@
       color: #0ff;
     }
 
+    .main-section {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 1200px;
+      position: relative;
+    }
+
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1rem;
+      flex: 1;
     }
 
     .cassette-container {
-      position: relative;
       width: 90vw;
       max-width: 600px;
     }
@@ -99,31 +111,6 @@
     .cassette-container img:hover {
       transform: scale(1.03);
       box-shadow: 0 0 25px #fef200;
-    }
-
-    .song-list {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      background: #111;
-      border: 2px solid #fef200;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 2;
-    }
-
-    .song-list li {
-      padding: 10px;
-      cursor: pointer;
-      color: #00ffc3;
-      border-bottom: 1px solid #333;
-    }
-
-    .song-list li:hover {
-      background-color: #333;
     }
 
     .controls {
@@ -181,14 +168,43 @@
       text-shadow: 0 0 5px #0ff;
     }
 
-    @media (max-width: 600px) {
-      .controls button {
-        font-size: 0.5rem;
-        padding: 0.4rem 0.6rem;
+    #playlistQueue {
+      display: none;
+      flex: 0 0 300px;
+      margin-left: 1rem;
+      padding: 1rem;
+      background-color: #111;
+      border: 2px dashed #fef200;
+      border-radius: 10px;
+      color: #0ff;
+      font-size: 0.6rem;
+      height: fit-content;
+    }
+
+    .playlist-item {
+      padding: 5px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .playlist-item.current {
+      color: #fef200;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .main-section {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #playlistQueue {
+        margin-left: 0;
+        margin-top: 1rem;
+        width: 90%;
       }
     }
 
-    /* Theme Classes */
+    /* Themes */
     .dark {
       --color-bg: #000;
       --color-text: #fef200;
@@ -231,27 +247,30 @@
 
   <input type="text" id="searchBox" placeholder="Search for songs...">
 
-  <div class="container">
-    <div class="cassette-container">
-      <img src="cassette.jpg" alt="Cassette" id="cassette">
-      <ul class="song-list" id="songList"></ul>
+  <div class="main-section">
+    <div class="container">
+      <div class="cassette-container">
+        <img src="cassette.jpg" alt="Cassette" id="cassette">
+      </div>
+
+      <div class="controls">
+        <button id="playPause">▶️ / ⏸️</button>
+        <button id="back">⏮️</button>
+        <button id="forward">⏭️</button>
+      </div>
+
+      <div class="equalizer" id="equalizer">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+
+      <p id="nowPlaying">🎵 Now Playing: None</p>
     </div>
 
-    <div class="controls">
-      <button id="playPause">▶️ / ⏸️</button>
-      <button id="back">⏮️</button>
-      <button id="forward">⏭️</button>
-    </div>
-
-    <div class="equalizer" id="equalizer">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </div>
-
-    <p id="nowPlaying">🎵 Now Playing: None</p>
+    <div id="playlistQueue"><strong>Playlist:</strong><br /></div>
   </div>
 
   <audio id="audioPlayer" src=""></audio>
@@ -259,7 +278,6 @@
 
   <script>
     const cassette = document.getElementById('cassette');
-    const songList = document.getElementById('songList');
     const audioPlayer = document.getElementById('audioPlayer');
     const playPause = document.getElementById('playPause');
     const back = document.getElementById('back');
@@ -269,44 +287,53 @@
     const equalizer = document.getElementById('equalizer');
     const soundEffect = document.getElementById('soundEffect');
     const themeSelector = document.getElementById('themeSelector');
+    const playlistQueue = document.getElementById('playlistQueue');
     const body = document.body;
 
     let tracks = [];
     let currentTrackIndex = 0;
+    let playlistVisible = false;
 
     cassette.addEventListener('click', async () => {
-      const query = searchBox.value || prompt("Search for music:");
-      if (!query) return;
-      try {
-        const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=song&limit=10`);
-        const data = await response.json();
-        tracks = data.results;
-        songList.innerHTML = '';
-        tracks.forEach((track, index) => {
-          const li = document.createElement('li');
-          li.textContent = `${track.trackName} — ${track.artistName}`;
-          li.dataset.src = track.previewUrl;
-          li.addEventListener('click', () => {
-            currentTrackIndex = index;
-            playTrack(tracks[currentTrackIndex]);
-            songList.style.display = 'none';
-            playSoundEffect();
+      if (!playlistVisible) {
+        const query = searchBox.value || prompt("Search for music:");
+        if (!query) return;
+        try {
+          const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=song&limit=10`);
+          const data = await response.json();
+          tracks = data.results;
+          playlistQueue.innerHTML = '<strong>Playlist:</strong><br />';
+          tracks.forEach((track, index) => {
+            const div = document.createElement('div');
+            div.classList.add('playlist-item');
+            div.textContent = `${track.trackName} — ${track.artistName}`;
+            div.addEventListener('click', () => {
+              currentTrackIndex = index;
+              playTrack(tracks[currentTrackIndex]);
+              playSoundEffect();
+              updatePlaylistHighlight();
+            });
+            playlistQueue.appendChild(div);
           });
-          songList.appendChild(li);
-        });
-        songList.style.display = 'block';
-        playSoundEffect();
-      } catch (e) {
-        console.error("Error fetching songs:", e);
-        alert("Failed to fetch songs.");
+          playlistQueue.style.display = 'block';
+          updatePlaylistHighlight();
+        } catch (e) {
+          console.error("Error fetching songs:", e);
+          alert("Failed to fetch songs.");
+        }
+      } else {
+        playlistQueue.style.display = 'none';
       }
+      playlistVisible = !playlistVisible;
+      playSoundEffect();
     });
 
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.cassette-container')) {
-        songList.style.display = 'none';
-      }
-    });
+    function updatePlaylistHighlight() {
+      const items = document.querySelectorAll('.playlist-item');
+      items.forEach((el, i) => {
+        el.classList.toggle('current', i === currentTrackIndex);
+      });
+    }
 
     playPause.addEventListener('click', () => {
       if (audioPlayer.paused) {
@@ -338,6 +365,7 @@
       audioPlayer.play();
       nowPlaying.textContent = `🎵 Now Playing: ${track.trackName} — ${track.artistName}`;
       equalizer.style.display = 'flex';
+      updatePlaylistHighlight();
     }
 
     audioPlayer.addEventListener('ended', () => forward.click());
