@@ -277,7 +277,44 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Glass boxes container - centered */
+.glass-boxes {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  z-index: 5;
+  align-items: center;
+}
 
+.glass-box {
+  width: 300px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: 'Press Start 2P', monospace;
+  color: #ffffff;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+}
+
+.glass-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+}
 
   </style>
 </head>
@@ -325,6 +362,20 @@
   <span></span>
   <span></span>
   <span></span>
+</div>
+<div class="glass-boxes">
+  <div class="glass-box">
+    <h2>Morse</h2>
+  </div>
+
+  <div class="glass-box">
+    <h2>Music</h2>
+  </div>
+
+  <div class="glass-box">
+    <h2>Meme</h2>
+    
+  </div>
 </div>
 
   <script>
